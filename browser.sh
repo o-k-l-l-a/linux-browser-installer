@@ -55,6 +55,7 @@ install_browser() {
             -e PUID=1000 \
             -e PGID=1000 \
             -e TZ=Etc/UTC \
+            -e DISABLE_HTTPS=true \
             -e CUSTOM_USER=$USERNAME \
             -e PASSWORD=$PASSWORD \
             -p $PORT:3000 \
