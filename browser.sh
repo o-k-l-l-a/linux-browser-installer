@@ -9,16 +9,20 @@ install_docker() {
     sh get-docker.sh
     rm get-docker.sh
 
+    # Enable/start service only if systemctl exists
     if command -v systemctl &> /dev/null; then
         sudo systemctl enable docker || true
         sudo systemctl start docker || true
     fi
 
+    # Create docker group if it does not exist
     if ! getent group docker > /dev/null 2>&1; then
         sudo groupadd docker
     fi
 
+    # Add current user to docker group
     sudo usermod -aG docker ${SUDO_USER:-$USER} || true
+
     echo "Docker installed successfully. Please log out and log back in for group changes to take effect."
 }
 
@@ -31,7 +35,7 @@ else
 fi
 
 # ===============================
-# Generic install/uninstall functions
+# Generic install function
 # ===============================
 install_browser() {
     local NAME=$1
@@ -44,32 +48,24 @@ install_browser() {
         read -p "Enter username for $NAME: " USERNAME
         read -sp "Enter password for $NAME: " PASSWORD
         echo
-
-        # Create config directory
-        CONFIG_DIR="/opt/browser-config/$NAME"
-        sudo mkdir -p "$CONFIG_DIR"
-        sudo chown ${SUDO_USER:-$USER}:${SUDO_USER:-$USER} "$CONFIG_DIR"
-
         echo "Installing $NAME..."
         docker run -d \
             --name=$NAME \
             --security-opt seccomp=unconfined \
-            -e PUID=$(id -u ${SUDO_USER:-$USER}) \
-            -e PGID=$(id -g ${SUDO_USER:-$USER}) \
+            -e PUID=1000 \
+            -e PGID=1000 \
             -e TZ=Etc/UTC \
             -e CUSTOM_USER=$USERNAME \
             -e PASSWORD=$PASSWORD \
             -p $PORT:3000 \
-            -v $CONFIG_DIR:/config \
+            -v /opt/browser-config/$NAME:/config \
             --shm-size="1gb" \
             --restart unless-stopped \
             $IMAGE
-
         echo "------------------------------------------------------------------------------------------------"
         echo "$NAME installed successfully."
         IP=$(hostname -I | awk '{print $1}')
         echo "Use browser with http://$IP:$PORT"
-        echo "Note: Using --security-opt seccomp=unconfined may reduce container security."
     fi
 }
 
@@ -86,7 +82,7 @@ uninstall_browser() {
 }
 
 # ===============================
-# Menu (single choice)
+# Menu
 # ===============================
 echo "Select an option:"
 echo "1) Install Chromium"
