@@ -86,41 +86,38 @@ uninstall_browser() {
 }
 
 # ===============================
-# Main Menu Loop
+# Menu (single choice)
 # ===============================
-while true; do
-    echo
-    echo "Select an option:"
-    echo "1) Install Chromium"
-    echo "2) Uninstall Chromium"
-    echo "3) Install Firefox"
-    echo "4) Uninstall Firefox"
-    echo "5) Install Brave"
-    echo "6) Uninstall Brave"
-    echo "7) Install Vivaldi"
-    echo "8) Uninstall Vivaldi"
-    echo "9) Install Midori"
-    echo "10) Uninstall Midori"
-    echo "11) Install Epiphany"
-    echo "12) Uninstall Epiphany"
-    echo "13) Exit"
+echo "Select an option:"
+echo "1) Install Chromium"
+echo "2) Uninstall Chromium"
+echo "3) Install Firefox"
+echo "4) Uninstall Firefox"
+echo "5) Install Brave"
+echo "6) Uninstall Brave"
+echo "7) Install Vivaldi"
+echo "8) Uninstall Vivaldi"
+echo "9) Install Midori"
+echo "10) Uninstall Midori"
+echo "11) Install Epiphany"
+echo "12) Uninstall Epiphany"
+echo "13) Exit"
 
-    read -p "Please choose: " choice
+read -p "Please choose: " choice
 
-    case $choice in
-        1) install_browser "chromium" "lscr.io/linuxserver/chromium:latest" 3000 ;;
-        2) uninstall_browser "chromium" ;;
-        3) install_browser "firefox" "lscr.io/linuxserver/firefox:latest" 4000 ;;
-        4) uninstall_browser "firefox" ;;
-        5) install_browser "brave" "lscr.io/linuxserver/brave:latest" 5000 ;;
-        6) uninstall_browser "brave" ;;
-        7) install_browser "vivaldi" "lscr.io/linuxserver/vivaldi:latest" 6000 ;;
-        8) uninstall_browser "vivaldi" ;;
-        9) install_browser "midori" "lscr.io/linuxserver/midori:latest" 7000 ;;
-        10) uninstall_browser "midori" ;;
-        11) install_browser "epiphany" "lscr.io/linuxserver/epiphany:latest" 8000 ;;
-        12) uninstall_browser "epiphany" ;;
-        13) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid choice. Please select a valid option." ;;
-    esac
-done
+case $choice in
+    1) install_browser "chromium" "lscr.io/linuxserver/chromium:latest" 3000 ;;
+    2) uninstall_browser "chromium" ;;
+    3) install_browser "firefox" "lscr.io/linuxserver/firefox:latest" 4000 ;;
+    4) uninstall_browser "firefox" ;;
+    5) install_browser "brave" "lscr.io/linuxserver/brave:latest" 5000 ;;
+    6) uninstall_browser "brave" ;;
+    7) install_browser "vivaldi" "lscr.io/linuxserver/vivaldi:latest" 6000 ;;
+    8) uninstall_browser "vivaldi" ;;
+    9) install_browser "midori" "lscr.io/linuxserver/midori:latest" 7000 ;;
+    10) uninstall_browser "midori" ;;
+    11) install_browser "epiphany" "lscr.io/linuxserver/epiphany:latest" 8000 ;;
+    12) uninstall_browser "epiphany" ;;
+    13) exit ;;
+    *) echo "Invalid choice. Please select a valid option." ;;
+esac
