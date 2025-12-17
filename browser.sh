@@ -3,17 +3,33 @@
 # ===============================
 # Check Docker Installation
 # ===============================
-if ! command -v docker &> /dev/null; then
-    echo "Docker is not installed."
-    read -p "Press Enter to install Docker..."
+install_docker() {
     echo "Installing Docker..."
     curl -fsSL https://get.docker.com -o get-docker.sh
     sh get-docker.sh
     rm get-docker.sh
-    sudo systemctl enable docker
-    sudo systemctl start docker
-    sudo usermod -aG docker $USER
+
+    # Enable/start service only if systemctl exists
+    if command -v systemctl &> /dev/null; then
+        sudo systemctl enable docker || true
+        sudo systemctl start docker || true
+    fi
+
+    # Create docker group if it does not exist
+    if ! getent group docker > /dev/null 2>&1; then
+        sudo groupadd docker
+    fi
+
+    # Add current user to docker group
+    sudo usermod -aG docker $USER || true
+
     echo "Docker installed successfully. Please log out and log back in for group changes to take effect."
+}
+
+if ! command -v docker &> /dev/null; then
+    echo "Docker is not installed."
+    read -p "Press Enter to install Docker..."
+    install_docker
 else
     echo "Docker is already installed."
 fi
